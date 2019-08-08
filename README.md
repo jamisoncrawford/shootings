@@ -12,7 +12,13 @@ Instead, these massacres address the influences of these growing phenomena, "fro
 
 <br>
 
-# References
+## Publication
+
+The publication for this overview may be found [here](http://rpubs.com/JamisonCrawford/shootings).
+
+<br>
+
+## References
 
 **Follman, Mark, Gavin Aronsen, Deanna Pan (2019).** "A Guide to Mass Shootings in America". *Mother Jones*. Retrieved on 07 August 2019 from [https://www.motherjones.com/politics/2012/07/mass-shootings-map/](https://www.motherjones.com/politics/2012/07/mass-shootings-map/).
 
@@ -20,6 +26,6 @@ Instead, these massacres address the influences of these growing phenomena, "fro
 
 <br>
 
-# Disclaimer
+## Disclaimer
 
 The use of *Mother Jones* as a data source, as well as the subject matter, do not necessarily reflect on the sociopolitical views or ideologies of the analyst and author of the present work.
