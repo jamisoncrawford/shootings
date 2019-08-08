@@ -8,21 +8,15 @@ Data derive from an [open source database](https://www.motherjones.com/politics/
 
 Instead, these massacres address the influences of these growing phenomena, "from the firearms used and mental health factors to the growing copycat problem" (ibid.).
 
-<br>
-
 ## Publication
 
 The publication for this overview may be found [here](http://rpubs.com/JamisonCrawford/shootings).
-
-<br>
 
 ## References
 
 **Follman, Mark, Gavin Aronsen, Deanna Pan (2019).** "A Guide to Mass Shootings in America". *Mother Jones*. Retrieved on 07 August 2019 from [https://www.motherjones.com/politics/2012/07/mass-shootings-map/](https://www.motherjones.com/politics/2012/07/mass-shootings-map/).
 
 **Follman, Mark, Gavin Aronsen, Deanna Pan (2019).** "US Mass Shootings, 1982 - 2019: Data From Mother Jones' Investigation". *Mother Jones*. Retrieved on 07 August 2019 from [https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/).
-
-<br>
 
 ## Disclaimer
 
