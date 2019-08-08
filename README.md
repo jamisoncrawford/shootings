@@ -1,7 +1,5 @@
 # Indiscriminate Mass Shootings in the U.S.
 
-<br>
-
 ## Overview & Data Sources
 
 The following visualizes indiscriminate mass shootings in the United States since 1982. 
