@@ -2,9 +2,9 @@
 
 ## Overview & Data Sources
 
-The following visualizes indiscriminate mass shootings in the United States since 1982. 
+This work visualizes indiscriminate mass shootings in the United States since 1982. 
 
-These data derive from an [open source database](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/) assembled by U.S. magazine *Mother Jones*, which defines "indiscriminate rampages" as having four or more victims and which "exclude[s] shootings stemming from more conventionally motivated crimes such as armed robbery or gang violence" ([Follman et al. 2019](https://www.motherjones.com/politics/2012/07/mass-shootings-map/)).
+Data derive from an [open source database](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/) assembled by U.S. magazine *Mother Jones*, which defines "indiscriminate rampages" as having four or more victims and which "exclude[s] shootings stemming from more conventionally motivated crimes such as armed robbery or gang violence" ([Follman et al. 2019](https://www.motherjones.com/politics/2012/07/mass-shootings-map/)).
 
 Instead, these massacres address the influences of these growing phenomena, "from the firearms used and mental health factors to the growing copycat problem" (ibid.).
 
