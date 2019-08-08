@@ -1,0 +1,205 @@
+---
+title: "Indiscriminate Mass Shootings in the U.S."
+author: "Jamison R. Crawford, MPA"
+date: "August 7, 2019"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+# Overview & Data Sources
+
+The following visualizes indiscriminate mass shootings in the United States since 1982. 
+
+These data derive from an [open source database](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/) assembled by U.S. magazine *Mother Jones*, which defines "indiscriminate rampages" as having four or more victims and which "exclude[s] shootings stemming from more conventionally motivated crimes such as armed robbery or gang violence" ([Follman et al. 2019](https://www.motherjones.com/politics/2012/07/mass-shootings-map/)).
+
+Instead, these massacres address the influences of these growing phenomena, "from the firearms used and mental health factors to the growing copycat problem" (ibid.).
+
+<br>
+
+```{r echo=FALSE, message=FALSE, eval=FALSE, warning=FALSE}
+    # Date: 2019-08-07
+    # R Version: 3.6.0
+    # RStudio Version: 1.2.1335
+    # Operating System: Windows 10
+    # Source: Follman, Mark et al. (2019). 
+        # "US Mass Shootings, 1982-2019: Data From Mother Jones’ Investigation". 
+        # Mother Jones. Retrieved on 07 August 2019 from
+        # https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/
+```
+
+```{r echo=FALSE, message=FALSE, eval=TRUE, warning=FALSE}
+
+# Install & Load Packages
+
+if(!require(readr)){install.packages("readr")}
+if(!require(dplyr)){install.packages("dplyr")}
+if(!require(stringr)){install.packages("stringr")}
+if(!require(leaflet)){install.packages("leaflet")}
+if(!require(lubridate)){install.packages("lubridate")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+
+library(readr)
+library(dplyr)
+library(stringr)
+library(leaflet)
+library(lubridate)
+library(kableExtra)
+
+# Read In Data (Source: Mother Jones, )
+
+url <- paste0("https://docs.google.com/spreadsheets/d/e",
+              "/2PACX-1vQBEbQoWMn_P81DuwmlQC0_jr2sJDzkk",
+              "C0mvF6WLcM53ZYXi8RMfUlunvP1B5W0jRrJvH-wc",
+              "-WGjDB1/pub?gid=0&single=true&output=csv")
+
+mass <- read_csv(url)
+
+rm(url)
+
+```
+
+```{r echo=FALSE, message=FALSE, eval=TRUE, warning=FALSE}
+
+# Dimension Reduction, Class Coersion, & Cleaning
+
+mass <- mass %>%
+  select(case:total_victims, sources, weapon_type:weapon_details, 
+         race:gender, latitude:longitude) %>%
+  mutate(date = mdy(date),
+         case = str_to_title(case),
+         fatalities = as.integer(fatalities),
+         injured = as.integer(injured),
+         total_victims = as.integer(total_victims))
+
+# Converting State Abbreviations
+
+mass$city <- str_split(mass$location, pattern = ", ", simplify = TRUE)[, 1]
+mass$state <- str_split(mass$location, pattern = ", ", simplify = TRUE)[, 2]
+
+mass <- left_join(mass, tibble(state = state.abb,
+                               state_full = state.name), 
+                  by = "state")
+
+index <- which(!is.na(mass$state_full))
+
+mass[index, "state"] <- mass[index, "state_full"]
+
+mass <- mass %>%
+  mutate(location = paste(city, state, sep = ", ")) %>%
+  select(-city:-state_full)
+
+# Convert URLs to Hyperlinks
+
+mass <- mass %>%
+  mutate(sources = str_replace_all(sources, pattern = "; .*$", ""),
+         link = paste0("<a href='", sources, "'>", case, "</a>"))
+
+# Title & Sentence Case; Full Gender
+
+mass$weapon_type <- str_to_title(mass$weapon_type)
+mass$weapon_details <- str_to_title(mass$weapon_details)
+
+mass$race <- str_to_title(mass$race)
+mass$race <- str_replace_all(mass$race, pattern = "^-$", "Unavailable")
+
+mass$gender <- str_replace_all(mass$gender, pattern = "^M$", "Male")
+mass$gender <- str_replace_all(mass$gender, pattern = "^F$", "Female")
+
+names(mass) <- str_replace_all(names(mass), "_", " ")
+names(mass) <- str_to_title(names(mass))  
+
+```
+
+# Visualizing Massacres
+
+While similar to the original [interactive map](https://www.motherjones.com/politics/2012/07/mass-shootings-map/) by *Mother Jones*, the popup data provided in the below map (`Map I`) includes additional data, including article links, total injured victims and fatalities, city and state, weapons and weapon details, e.g. modifications, and both race and gender of the shooter(s).
+
+**How to Use this Map****:** Each circle in the below map represents one mass shooting, while the size of the circle indicates total fatalities per incident. Use your mouse wheel or the `+` or `-` icons to zoom in and out. Click and drag the map to move the window in different directions. Click a circle to view the details of the shooting.
+
+<br>
+
+<center>
+
+**Map I: Indiscriminate Mass Shootings in the U.S.**
+
+```{r echo=FALSE, message=FALSE, eval=TRUE, warning=FALSE, fig.width=8.5, fig.height=6}
+mass %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(lng = mass$Longitude,
+                   lat = mass$Latitude,
+                   weight = 1.25,
+                   radius = mass$Fatalities,
+                   color = "tomato", 
+                   opacity = 1, 
+                   fillOpacity = 0.5,
+                   popup = paste(mass$Link, 
+                                 "<br>", mass$Location,
+                                 "<br>", mass$Date,
+                                 "<br><br>Perpetrator Race:", mass$Race,
+                                 "<br>Perpetrator Gender:", mass$Gender,
+                                 "<br><br>Injuries: ", mass$Injured,
+                                 "<br>Fatalities: ", mass$Fatalities,
+                                 "<br>Total Victims: ", mass$`Total Victims`,
+                                 "<br><br>Weapon(s): ", mass$`Weapon Type`,
+                                 "<br><br>Weapon Details: ", mass$`Weapon Details`, 
+                                 "<br><br>", mass$Summary))
+```
+
+*Larger circles indicate more fatalities. Zoom in to more easily view each mass shooting.* 
+
+</center>
+
+<br>
+
+# Appendices
+
+The following table (`Table I`) contains key variables related to the mass shootings visualized above.
+
+<center>
+
+<br>
+
+**Table I: Mass Shooting Names, Places, Dates, and Victim Count**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE}
+
+appn <- mass %>%
+  select(Case:Date, `Total Victims`) %>%
+  arrange(desc(`Total Victims`))
+
+kable(appn) %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "hover", 
+                                      "responsive"),
+                font_size = 14,
+                full_width = TRUE)
+
+```
+
+</center>
+
+<br>
+
+# References
+
+**Follman, Mark, Gavin Aronsen, Deanna Pan (2019).** "A Guide to Mass Shootings in America". *Mother Jones*. Retrieved on 07 August 2019 from [https://www.motherjones.com/politics/2012/07/mass-shootings-map/](https://www.motherjones.com/politics/2012/07/mass-shootings-map/).
+
+**Follman, Mark, Gavin Aronsen, Deanna Pan (2019).** "US Mass Shootings, 1982 - 2019: Data From Mother Jones' Investigation". *Mother Jones*. Retrieved on 07 August 2019 from [https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/).
+
+<br>
+
+# Disclaimer
+
+The use of *Mother Jones* as a data source, as well as the subject matter, do not necessarily reflect on the sociopolitical views or ideologies of the analyst and author of the present work.
