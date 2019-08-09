@@ -163,6 +163,12 @@ mass %>%
 
 <br>
 
+# Documentation
+
+All documentation and reproducible scripts for the present work may be found in [this Github repository](https://github.com/jamisoncrawford/shootings).
+
+<br>
+
 # Appendices
 
 The following table (`Table I`) contains key variables related to the mass shootings visualized above.
